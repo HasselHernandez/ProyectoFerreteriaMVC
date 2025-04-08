@@ -8,7 +8,9 @@ import UTIL.ConexionDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -24,18 +26,49 @@ public class CategoriaDAO {
              stmt.setString(2, categoria.getDescripcionCategoria());
              stmt.executeUpdate();
         }
+        }
+        // Método para leer todas las categorías
+    public List<Categoria> leerTodasCategorias() throws SQLException {
+        
+        String sql = "SELECT * FROM Categorias";
+        List<Categoria> categorias = new ArrayList<>();
+        
+        try (Connection c = ConexionDB.getConnection();
+                
+        PreparedStatement stmt = c.prepareStatement(sql);
+                
+        ResultSet rs = stmt.executeQuery()) {
+    while (rs.next()) {
+        
+        Categoria categoria = new Categoria();
+        categoria.setIdCategoria(rs.getInt("id_categoria"));
+        categoria.setNombreCategoria(rs.getString("nombre_categoria"));
+        categoria.setDescripcionCategoria(rs.getString("descripcion_categoria"));
+        categorias.add(categoria);
+        }
+        }
+    return categorias;
     }
+    
+    
+    
    // Metodo tem´poral para probar 
-public static void main(String[]args){
-try{
-    CategoriaDAO dao = new CategoriaDAO();
-    Categoria c1 = new Categoria();
-    c1.setNombreCategoria("Herramientas");
-    c1.setDescripcionCategoria("Categoria para herramienta de ferreteria");
-    dao.crearCategoria(c1);
-    System.out.println("Categoria creada con exito");
-  }catch (SQLException e){
-      System.out.println("Error al crear categoria:" + e.getMessage());
-  }
-}
+    public static void main(String[]args){
+    try{
+        CategoriaDAO dao = new CategoriaDAO();
+        
+        // Leer y mostrar todas las categorías
+        List<Categoria> categorias = dao.leerTodasCategorias();
+        System.out.println("\nLista de categorías:");
+        for (Categoria cat : categorias) {
+        System.out.println("ID: " + cat.getIdCategoria() +
+
+        ", Nombre: " + cat.getNombreCategoria() +
+        ", Descripción: " + cat.getDescripcionCategoria());
+
+        }
+      }catch (SQLException e){
+          System.out.println("Error al crear categoria:" + e.getMessage());
+      }
+    }
 }

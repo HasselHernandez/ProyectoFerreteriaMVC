@@ -54,10 +54,43 @@ public class DetalleVentaDAO {
         }
         return detalles;
     }
+    
+    // Método para actualizar un detalle de venta
+public void actualizarDetalleVenta(DetalleVenta detalle) throws SQLException {
+    String sql = "UPDATE Detalles_Ventas SET id_venta = ?, id_producto = ?, cantidad = ?, precio_unitario = ? WHERE id_detalle_venta = ?";
+    
+    try (Connection c = ConexionDB.getConnection();
+         PreparedStatement stmt = c.prepareStatement(sql)) {
+        stmt.setInt(1, detalle.getIdVenta());
+        stmt.setInt(2, detalle.getIdProducto());
+        stmt.setInt(3, detalle.getCantidad());
+        stmt.setFloat(4, detalle.getPrecioUnitario());
+        stmt.setInt(5, detalle.getIdDetalleVenta());
+        stmt.executeUpdate();
+    }
+}
+
+// Método para eliminar un detalle de venta
+public void eliminarDetalleVenta(int idDetalleVenta) throws SQLException {
+    String sql = "DELETE FROM Detalles_Ventas WHERE id_detalle_venta = ?";
+    
+    try (Connection c = ConexionDB.getConnection();
+         PreparedStatement stmt = c.prepareStatement(sql)) {
+        stmt.setInt(1, idDetalleVenta);
+        stmt.executeUpdate();
+    }
+}
 
     public static void main(String[] args) {
             try {
                 DetalleVentaDAO dao = new DetalleVentaDAO();
+                
+                // Actualizar un detalle de venta
+       
+        // Eliminar un detalle de venta
+        dao.eliminarDetalleVenta(2); // ID a eliminar
+        System.out.println("Detalle de venta eliminado.");
+        
                 List<DetalleVenta> detalles = dao.leerTodosDetallesVenta();
                 System.out.println("Lista de detalles de venta:");
                 for (DetalleVenta det : detalles) {

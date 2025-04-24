@@ -12,27 +12,37 @@ import java.util.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
 /**
  *
  * @author Hassel
  */
 public class CompraDAO {
-    public void crearCompra(Compra compra) throws SQLException {
-    String sql = """
+   //Método del CompraDAO
+    public int crearCompra(Compra compra) throws SQLException {
+        String sql = """
         INSERT INTO Compras (
             id_empleado, 
             fecha_compra, 
             total_compra
         ) VALUES (?, ?, ?)""";
-    
-    try (Connection c = ConexionDB.getConnection();
-         PreparedStatement stmt = c.prepareStatement(sql)) {
-        stmt.setInt(1, compra.getIdEmpleado());
-        stmt.setDate(2, new java.sql.Date(compra.getFechaCompra().getTime()));
-        stmt.setFloat(3, compra.getTotalCompra());
-        stmt.executeUpdate();
+        int generatedId = -1;
+
+        try (Connection c = ConexionDB.getConnection(); PreparedStatement stmt = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, compra.getIdEmpleado());
+            stmt.setDate(2, new java.sql.Date(compra.getFechaCompra().getTime()));
+            stmt.setFloat(3, compra.getTotalCompra());
+            stmt.executeUpdate();
+
+            // Obtener el ID generado
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    generatedId = rs.getInt(1);
+                }
+            }
+        }
+        return generatedId;
     }
-}
     
     public List<Compra> leerTodasCompras() throws SQLException {
         String sql = "SELECT * FROM Compras";

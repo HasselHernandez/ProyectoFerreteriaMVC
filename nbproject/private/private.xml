@@ -3,24 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/EmpleadoControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/DetalleCompraDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/EmpleadoDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/CompraControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/UsuarioControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/CategoriaDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/ProductoDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/UsuarioDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/CategoriaControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/ProductoControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/ClienteDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/VentaControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/VentaDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/DetalleVentaDAO.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/ClienteControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/DetalleVentaControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Controlador/DetalleCompraControlador.java</file>
-            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/DAO/CompraDAO.java</file>
+            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Vista/VistaProductos.java</file>
+            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Vista/VistaPrincipal.java</file>
+            <file>file:/C:/Users/Hassel/Documents/NetBeansProjects/ProyectoFerreteriaMVC/src/Vista/VistaCategorias.java</file>
         </group>
     </open-files>
 </project-private>

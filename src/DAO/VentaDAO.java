@@ -61,6 +61,23 @@ public void actualizarVenta(Venta venta) throws SQLException {
     }
 }
 
+public List<Venta> leerTodasVentas() throws SQLException {
+        String sql = "SELECT * FROM Ventas";
+        List<Venta> ventas = new ArrayList<>();
+
+        try (Connection c = ConexionDB.getConnection(); PreparedStatement stmt = c.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Venta venta = new Venta();
+                venta.setIdCliente(rs.getInt("id_cliente"));
+                venta.setIdEmpleado(rs.getInt("id_empleado"));
+                venta.setFechaVenta(rs.getTimestamp("fecha_venta"));
+                venta.setTotalVenta(rs.getFloat("total_venta"));
+                ventas.add(venta);
+            }
+        }
+        return ventas;
+    }
+
 // Método para eliminar una venta
 public void eliminarVenta(int idVenta) throws SQLException {
     String sql = "DELETE FROM Ventas WHERE id_venta = ?";

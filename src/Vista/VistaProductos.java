@@ -15,8 +15,36 @@ import javax.swing.table.DefaultTableModel;
  * @author Hassel
  */
 public class VistaProductos extends javax.swing.JPanel {
-
-        private void cargarDatosTabla() {
+    
+    private final ProductoControlador ProductoControlador;
+    private Integer idProductoSeleccionado = null;
+    private final CategoriaControlador CategoriaControlador;
+    private Integer idCategoriaSeleccionado = null;
+    /**
+     * Creates new form VistaProductos
+     */
+    public VistaProductos() {
+        initComponents();
+        this.ProductoControlador = new ProductoControlador();
+        this.CategoriaControlador = new CategoriaControlador();
+        cargarDatosTabla();
+        cargarCategorias();
+        
+    }
+    
+            private void limpiar() {
+        textNombreProducto.setText("");
+        textDescripcionProducto.setText("");
+        textPrecioUnitario.setText("");
+        textStock.setText("");
+        textImagen.setText("");
+        textBuscar.setText("");
+        idProductoSeleccionado = null;
+        btnEliminar.setEnabled(true);
+        btnGuardar.setEnabled(true);
+        }
+            
+              private void cargarDatosTabla() {
     List<Producto> productos = ProductoControlador.obtenerTodosProductos();
     if (productos != null) {
     DefaultTableModel model = (DefaultTableModel) tablaProductos.getModel();
@@ -35,13 +63,69 @@ public class VistaProductos extends javax.swing.JPanel {
     }
     }
     }
-    /**
-     * Creates new form VistaProductos
-     */
-    public VistaProductos() {
-        initComponents();
-    }
+        
+                private void cargarCategorias() {
+        try {
+        // Obtener las categorías desde el controlador
+        List<Categoria> categorias =
+        CategoriaControlador.obtenerTodasCategorias();
+        // Limpiar el combo box por si tiene datos
+        comboCategorias.removeAllItems();
+        // Agregar cada categoría al combo box
+        for (Categoria cat : categorias) {
+        comboCategorias.addItem(cat.getNombreCategoria());
+        }
+        } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+        "Error al cargar las categorías: " + e.getMessage());
+        }
+        }
+               
+                
+                private void eventoComboCategorias() {
+    comboCategorias.addActionListener(e -> {
+        // Obtener el índice seleccionado
+        int indiceSeleccionado = comboCategorias.getSelectedIndex();
 
+        if (indiceSeleccionado >= 0) { // Verificar que se haya seleccionado algo
+            try {
+                // Obtener la lista de categorías desde el controlador o memoria
+                List<Categoria> categorias = CategoriaControlador.obtenerTodasCategorias();
+
+                // Obtener el objeto de categoría correspondiente al índice seleccionado
+                Categoria categoriaSeleccionada = categorias.get(indiceSeleccionado);
+
+                // Actualizar la variable global con el ID de la categoría seleccionada
+                idCategoriaSeleccionado = categoriaSeleccionada.getIdCategoria();
+
+                // Mostrar el ID seleccionado en la consola (puedes quitar esta línea)
+                System.out.println("ID de la categoría seleccionada: " + idCategoriaSeleccionado);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al seleccionar categoría: " + ex.getMessage());
+            }
+        }
+    });
+}
+                
+                private void seleccionarCategoriaEnCombo(Integer idCategoria) {
+    try {
+        // Obtener las categorías desde el controlador
+        List<Categoria> categorias = CategoriaControlador.obtenerTodasCategorias();
+
+        // Recorrer las categorías y buscar la que coincida con el ID
+        for (int i = 0; i < categorias.size(); i++) {
+            Categoria categoria = categorias.get(i);
+            if (categoria.getIdCategoria() == idCategoria) {
+                comboCategorias.setSelectedIndex(i);
+                break;
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al seleccionar categoría: " + e.getMessage());
+    }
+}
+
+                
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,13 +172,39 @@ public class VistaProductos extends javax.swing.JPanel {
 
         jLabel7.setText("Buscar");
 
+        textBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textBuscarKeyTyped(evt);
+            }
+        });
+
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accionBotonLimpiar(evt);
+            }
+        });
 
         btnGuardar.setText("Guardar ");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idCategoriaSeleccionado(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar ");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accionBotonEliminar(evt);
+            }
+        });
 
         btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accionBotonActualizar(evt);
+            }
+        });
 
         tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -120,6 +230,11 @@ public class VistaProductos extends javax.swing.JPanel {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tablaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaProductosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tablaProductos);
@@ -202,6 +317,172 @@ public class VistaProductos extends javax.swing.JPanel {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void idCategoriaSeleccionado(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idCategoriaSeleccionado
+        // TODO add your handling code here:
+         String nombreProducto = textNombreProducto.getText();
+    String descripcionProducto = textDescripcionProducto.getText();
+    int idCategoria = idCategoriaSeleccionado;
+    float precioUnitario = Float.parseFloat(textPrecioUnitario.getText());
+    int stock = Integer.parseInt(textPrecioUnitario.getText());
+    String imagen = textImagen.getText();
+
+    if (!nombreProducto.isEmpty() &&
+        !descripcionProducto.isEmpty() &&
+        precioUnitario >= 0 &&
+        stock >= 0) {
+        try {
+            ProductoControlador.crearProducto(
+                nombreProducto,
+                descripcionProducto,
+                idCategoria,
+                precioUnitario,
+                stock,
+                imagen);
+            limpiar();
+            cargarDatosTabla();
+            cargarCategorias();
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error en los datos: " + e.getMessage(),
+                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Por favor, llene todos los campos obligatorios correctamente.",
+            "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+
+    }//GEN-LAST:event_idCategoriaSeleccionado
+
+    private void accionBotonEliminar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accionBotonEliminar
+        // TODO add your handling code here:
+    int filaSeleccionada = tablaProductos.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        int idProducto = (int) tablaProductos.getValueAt(filaSeleccionada, 0);
+        ProductoControlador.eliminarProducto(idProducto);
+        cargarDatosTabla();
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Selecciona una fila para eliminar.",
+            "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }   
+    }//GEN-LAST:event_accionBotonEliminar
+
+    private void tablaProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProductosMouseClicked
+        // TODO add your handling code here:                                    
+    // Verifica si fue un doble clic
+    if (evt.getClickCount() == 2) {
+        // Obtener la fila seleccionada
+        int filaSeleccionada = tablaProductos.getSelectedRow();
+
+        if (filaSeleccionada != -1) {
+            // Obtener el modelo de la tabla
+            DefaultTableModel model = (DefaultTableModel) tablaProductos.getModel();
+
+            // Extraer los datos de la fila seleccionada
+            idProductoSeleccionado = (Integer) model.getValueAt(filaSeleccionada, 0);
+            String nombreProducto = (String) model.getValueAt(filaSeleccionada, 1);
+            String descripcionProducto = (String) model.getValueAt(filaSeleccionada, 2);
+            Integer idCategoria = (Integer) model.getValueAt(filaSeleccionada, 3);
+            Float precioUnitario = (Float) model.getValueAt(filaSeleccionada, 4);
+            Integer stock = (Integer) model.getValueAt(filaSeleccionada, 5);
+            String imagen = (String) model.getValueAt(filaSeleccionada, 6);
+
+            // Asignar los valores a los campos de texto
+            textNombreProducto.setText(nombreProducto);
+            textDescripcionProducto.setText(descripcionProducto);
+            textPrecioUnitario.setText(precioUnitario.toString());
+            textStock.setText(stock.toString());
+            textImagen.setText(imagen);
+
+            // Seleccionar la categoría correspondiente en el combo
+            seleccionarCategoriaEnCombo(idCategoria);
+            idCategoriaSeleccionado = idCategoria;
+
+            // Deshabilitar el botón Eliminar y Guardar si es necesario
+            btnEliminar.setEnabled(false);
+            btnGuardar.setEnabled(false);
+        }
+    }
+    }//GEN-LAST:event_tablaProductosMouseClicked
+
+    private void accionBotonActualizar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accionBotonActualizar
+        // TODO add your handling code here:                                   
+    String nombreProducto = textNombreProducto.getText();
+    String descripcionProducto = textDescripcionProducto.getText();
+    int idCategoria = idCategoriaSeleccionado;
+    float precioUnitario = Float.parseFloat(textPrecioUnitario.getText());
+    int stock = Integer.parseInt(textStock.getText());
+    String imagen = textImagen.getText();
+
+    if (idProductoSeleccionado != null &&
+        !nombreProducto.isEmpty() &&
+        !descripcionProducto.isEmpty() &&
+        idCategoria >= 0 &&
+        stock >= 0) {
+
+        try {
+            ProductoControlador.actualizarProducto(
+                idProductoSeleccionado,
+                nombreProducto,
+                descripcionProducto,
+                idCategoria,
+                precioUnitario,
+                stock,
+                imagen
+            );
+            cargarDatosTabla(); // Vuelve a cargar los datos en la tabla después de actualizar
+            limpiar(); // Limpia los campos
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error en los datos: " + e.getMessage(),
+                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Por favor, llene todos los campos obligatorios.",
+            "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_accionBotonActualizar
+
+    private void textBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBuscarKeyTyped
+        // TODO add your handling code here:                                 
+    String textoBusqueda = textBuscar.getText().trim().toLowerCase();
+    List<Producto> productos = ProductoControlador.obtenerTodosProductos();
+
+    DefaultTableModel modelo = (DefaultTableModel) tablaProductos.getModel();
+    modelo.setRowCount(0); // Limpia la tabla antes de mostrar los resultados
+
+    if (productos != null) {
+        for (Producto pro : productos) {
+            // Busca coincidencias en los campos del producto
+            if (textoBusqueda.isEmpty() || // Si el campo de búsqueda está vacío, muestra todos
+                pro.getNombreProducto().toLowerCase().contains(textoBusqueda) ||
+                pro.getDescripcionProducto().toLowerCase().contains(textoBusqueda) ||
+                String.valueOf(pro.getIdCategoria()).contains(textoBusqueda) ||
+                String.valueOf(pro.getPrecioUnitario()).contains(textoBusqueda) ||
+                String.valueOf(pro.getStock()).contains(textoBusqueda)) {
+                
+                Object[] fila = {
+                    pro.getIdProducto(),
+                    pro.getNombreProducto(),
+                    pro.getDescripcionProducto(),
+                    pro.getIdCategoria(),
+                    pro.getPrecioUnitario(),
+                    pro.getStock(),
+                    pro.getImagen()
+                };
+                modelo.addRow(fila); // Agrega la fila a la tabla
+            }
+        }
+    }
+    }//GEN-LAST:event_textBuscarKeyTyped
+
+    private void accionBotonLimpiar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accionBotonLimpiar
+        // TODO add your handling code here:
+        limpiar ();
+    }//GEN-LAST:event_accionBotonLimpiar
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -3,20 +3,49 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package Vista;
+import Controlador.UsuarioControlador;
+import Modelo.Categoria;
+import Modelo.Usuario;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Hassel
  */
 public class VistaUsuario extends javax.swing.JPanel {
-
+ private final UsuarioControlador usuarioControlador;
+    private Integer idUsuarioSeleccionada = null;
     /**
      * Creates new form VistaUsuario
      */
     public VistaUsuario() {
         initComponents();
+           this.usuarioControlador= new UsuarioControlador();
+    cargarDatosTabla();
     }
 
+    private void cargarDatosTabla (){
+        // Obtener todas las categorias del controlador
+        List<Usuario> usuarios = usuarioControlador.obtenerTodosUsuarios();
+        
+        if (usuarios != null) {
+            //Obtener el modelo existente de la tabla 
+            DefaultTableModel model= (DefaultTableModel) tablaUsuario.getModel();
+            //Limpiar las filas existentes 
+            model.setRowCount(0);
+            
+            //Llenar las filas con los datos categorias
+            for (Usuario cat : usuarios) {
+                Object[] row = {
+                    cat.getIdUsuario(),
+                    cat.getUsuario(),
+                    cat.getContrasena()
+                };
+                model.addRow(row);
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,19 +55,245 @@ public class VistaUsuario extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextField4 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        textContraseña = new javax.swing.JTextField();
+        textUsuario = new javax.swing.JTextField();
+        textBuscar = new javax.swing.JTextField();
+        btnGuardar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaUsuario = new javax.swing.JTable();
+
+        jTextField4.setText("jTextField4");
+
+        jLabel3.setText("Contraseña");
+
+        jLabel4.setText("Usuario");
+
+        textBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textBuscarKeyTyped(evt);
+            }
+        });
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accionBotonGuardar(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accionBotonEliminar(evt);
+            }
+        });
+
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accionBotonActualizar(evt);
+            }
+        });
+
+        tablaUsuario.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID usuario", "Usuario", "Contraseña"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaUsuarioMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tablaUsuario);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(168, 168, 168))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(textBuscar)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(textUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(textContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textBuscar))
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void accionBotonGuardar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accionBotonGuardar
+        // TODO add your handling code here:
+         String usuario = textUsuario.getText();
+        String contrasena = textContraseña.getText();
+        
+        if (!usuario.isEmpty()&& !contrasena.isEmpty()) {
+            usuarioControlador.crearUsuario(usuario, contrasena);
+            cargarDatosTabla();
+            textUsuario.setText("");
+            textContraseña.setText("");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, llene todos los campos,", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+                             
+    }//GEN-LAST:event_accionBotonGuardar
+
+    private void accionBotonEliminar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accionBotonEliminar
+        // TODO add your handling code here:
+        int filaSeleccionada = tablaUsuario.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            int idUsuario = (int) tablaUsuario.getValueAt(filaSeleccionada, 0);
+           usuarioControlador.eliminarUsuario(idUsuario);
+            cargarDatosTabla();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila para eleiminar.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE); 
+        }  
+    }//GEN-LAST:event_accionBotonEliminar
+
+    private void tablaUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuarioMouseClicked
+        // TODO add your handling code here:
+        if (evt.getClickCount()== 2) {
+            int filaSeleccionada = tablaUsuario.getSelectedRow();
+            if (filaSeleccionada != -1) {
+                int idUsuarioSeleccionada = (int) tablaUsuario.getValueAt(filaSeleccionada, 0);
+                String usuario= (String) tablaUsuario.getValueAt(filaSeleccionada, 1);
+                String contraseña = (String) tablaUsuario.getValueAt(filaSeleccionada, 2);
+                
+                textUsuario.setText(usuario);
+                textContraseña.setText(contraseña);
+                
+                btnEliminar.setEnabled(false);
+                btnGuardar.setEnabled(false);
+            }
+        }          
+    }//GEN-LAST:event_tablaUsuarioMouseClicked
+
+    private void accionBotonActualizar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accionBotonActualizar
+        // TODO add your handling code here:
+          String usuario = textUsuario.getText();
+        String contraseña = textContraseña.getText();
+        
+        if (idUsuarioSeleccionada != null && !usuario.isEmpty() && !contraseña.isEmpty()) { 
+            
+          usuarioControlador.actualizarUsuario(idUsuarioSeleccionada, usuario, contraseña);
+            cargarDatosTabla();
+            
+            textUsuario.setText("");
+            textContraseña.setText("");
+            idUsuarioSeleccionada = null;
+            
+           btnEliminar.setEnabled(true);
+           btnGuardar.setEnabled(true);
+        }else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, llene todos los campos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_accionBotonActualizar
+
+    private void textBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBuscarKeyTyped
+        // TODO add your handling code here:
+         String textoBusqueda = textBuscar.getText().trim().toLowerCase();
+        List<Usuario> usuarios = usuarioControlador.obtenerTodosUsuarios();
+        
+        DefaultTableModel modelo = (DefaultTableModel) tablaUsuario.getModel();
+        modelo.setRowCount(0);
+        
+        if (usuarios!= null) {
+            for (Usuario cat : usuarios) {
+                if (textoBusqueda.isEmpty()|| 
+                   cat.getUsuario().toLowerCase().contains(textoBusqueda)||
+                   cat.getContrasena().toLowerCase().contains(textoBusqueda)){  
+                         Object[] fila = {
+                        cat.getIdUsuario(),
+                        cat.getUsuario(),
+                        cat.getContrasena()
+                    };
+                    modelo.addRow(fila);
+                }
+            }
+        }
+    }//GEN-LAST:event_textBuscarKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable tablaUsuario;
+    private javax.swing.JTextField textBuscar;
+    private javax.swing.JTextField textContraseña;
+    private javax.swing.JTextField textUsuario;
     // End of variables declaration//GEN-END:variables
 }

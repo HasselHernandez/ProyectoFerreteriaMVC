@@ -15,12 +15,16 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     public VistaPrincipal() {
         initComponents();
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
         opciones.addTab("Categorias", new VistaCategorias());
          opciones.addTab("Usuario", new VistaUsuario());
          opciones.addTab("Empleado", new VistaEmpleado());
          opciones.addTab("Cliente", new VistaCliente());
          opciones.addTab("Producto", new VistaProductos());
-         
+         opciones.addTab("Ventas", new VistaVentas());
+         opciones.addTab("Compras", new VistaCompras());
          opciones.addTab("Consultas con IA", new VistaConsultasDinamicas());
     }
 
@@ -37,6 +41,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ferretería Lira ");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                accionCerrarVistaPrincipal(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -44,8 +53,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(opciones, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(opciones, javax.swing.GroupLayout.PREFERRED_SIZE, 772, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -57,6 +66,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void accionCerrarVistaPrincipal(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_accionCerrarVistaPrincipal
+            // TODO add your handling code here:
+            setVisible(false); // Oculta VistaPrincipal
+    VistaInicioSesion inicioSesion = new VistaInicioSesion();
+    inicioSesion.setVisible(true); // Muestra el inicio de sesión
+    }//GEN-LAST:event_accionCerrarVistaPrincipal
 
     /**
      * @param args the command line arguments

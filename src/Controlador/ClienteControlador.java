@@ -20,6 +20,15 @@ import javax.swing.JOptionPane;
     public ClienteControlador() {
         this.clienteDAO = new ClienteDAO();
     }
+    
+    public Cliente obtenerClientePorId(int idCliente) {
+        try {
+            return clienteDAO.obtenerClientePorId(idCliente);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener el cliente: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
 
     // Método para crear un nuevo cliente
     public void crearCliente(String primerNombre, String segundoNombre, String primerApellido,
